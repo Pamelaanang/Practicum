@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Matrix</title>
+    <style>
+      table {
+        width: 50%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      td.selected {
+        background-color: lightblue;
+      }
+      #selectedCell {
+        padding: 10px;
+        margin-top: 10px;
+      }
+    </style>
+</head>
+<body>
+    <div id="matrix">
+        <table id="matrixTable">
+                <tr>
+                  <th></th>
+                  <th>Data</th>
+                  <th>Database</th>
+                  <th>RDBMS</th>
+                </tr>
+                <tr>
+                  <th>Data</th>
+                  <td>('Data', 'Data')</td>
+                  <td>('Data', 'Database')</td>
+                  <td>('Data', 'RDBMS')</td>
+                </tr>
+                <tr>
+                  <th>Database</th>
+                  <td>('Database', 'Data')</td>
+                  <td>('Database', 'Database')</td>
+                  <td>('Database', 'RDBMS')</td>
+                </tr>
+                <tr>
+                  <th>RDBMS</th>
+                  <td>('RDBMS', 'Data')</td>
+                  <td>('RDBMS', 'Database')</td>
+                  <td>('RDBMS', 'RDBMS')</td>
+                </tr>             
+              </table>
+    </div>
+    <div id="selectedCell"></div>
+
+
+    <script>
+        document.getElementById('matrixTable').addEventListener('click', function(e) {
+            var cell = e.target;
+            if(cell.tagName === 'TD') {
+                // Remove 'selected' class from previously selected cell if any
+                var selectedCells = document.querySelectorAll('.selected');
+                selectedCells.forEach(selectedCell => {
+                    selectedCell.classList.remove('selected');
+                });
+                // Add 'selected' class to the clicked cell
+                cell.classList.add('selected');
+                document.getElementById('selectedCell').innerText = 'Relation test: ' + cell.innerText;
+                handleCellClick(cell.id);
+            }
+        });
+
+        function handleCellClick(cellId) {
+            const message = {
+                type: 'cellClicked',
+                detail: {
+                    x: cellId.substring(4),
+                    y: 'Data' // Update this with the appropriate value
+                }
+            };
+            window.postMessage(message, '*');
+        }
+    </script>
+  
+</body>
+</html>
